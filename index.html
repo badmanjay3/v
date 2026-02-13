@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One More Question...</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .card {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        max-width: 400px;
+        position: relative;
+    }
+
+    h1 {
+        margin-bottom: 15px;
+    }
+
+    p {
+        color: #555;
+        margin-bottom: 25px;
+    }
+
+    button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    #yesBtn {
+        background-color: #ff4d6d;
+        color: white;
+    }
+
+    #noBtn {
+        background-color: #ddd;
+        position: absolute;
+    }
+
+    #message {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #ff4d6d;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Before You Say No Again…</h1>
+    <p>I know you said no yesterday. But I had to ask properly.</p>
+    <p>Will you be my Valentine?</p>
+
+    <!-- Formspree Yes button -->
+    <form id="valentineForm" action="https://formspree.io/f/mbdagajr" method="POST">
+        <input type="hidden" name="message" value="She clicked YES to being my Valentine!">
+        <button type="submit" id="yesBtn">Yes 💖</button>
+    </form>
+
+    <button id="noBtn">No 😪</button>
+    <div id="message"></div>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+
+// Move No button around
+function moveButton(e) {
+    if (e) e.preventDefault();
+
+    const buttonWidth = noBtn.offsetWidth;
+    const buttonHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - buttonWidth - 10;
+    const maxY = window.innerHeight - buttonHeight - 10;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+// Desktop hover
+noBtn.addEventListener("mouseover", moveButton);
+
+// Mobile touch
+noBtn.addEventListener("touchstart", moveButton);
+
+// Handle Formspree submission silently
+const form = document.getElementById("valentineForm");
+form.addEventListener("submit", function(e){
+    e.preventDefault(); // prevent normal submission
+    fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+    }).then(() => {
+        document.getElementById("message").innerHTML =
+            "Best decision of 2026. Valentine secured ❤️";
+    }).catch(() => {
+        document.getElementById("message").innerHTML =
+            "Oops! Something went wrong.";
+    });
+});
+</script>
+
+</body>
+</html>
